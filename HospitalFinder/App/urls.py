@@ -11,5 +11,5 @@ urlpatterns=[
     path("About", views.About),
     path("Team", views.Team),
     path("Contact", views.Contact),
-    path("CONTACT", views.CONTACT),
+    path("CONTACT", views.CONTACT)
 ]
