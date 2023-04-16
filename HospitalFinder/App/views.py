@@ -2,6 +2,12 @@ from django.shortcuts import render
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+import firebase_admin
+from csvjson import hps
+from firebase_admin import credentials
+
+from firebase_admin import firestore
+
 options = webdriver.ChromeOptions()
 options.add_argument("headless")
 driver = webdriver.Chrome(executable_path='chromedriver', chrome_options=options)
@@ -131,6 +137,9 @@ def About(request):
 
 
 #CONTACT DATA
+cred = credentials.Certificate("./serviceKey.json")
+firebase_admin.initialize_app(cred)
+fDb = firestore.client()
 
 def CONTACT(request):
     if request.method == "POST":
@@ -139,3 +148,14 @@ def CONTACT(request):
         phone = request.POST["phone"]
         message = request.POST["message"]
 
+        cData = {
+            'name':name,
+            'email':email,
+            'phone':phone,
+            'message':message
+        }
+        # From Here it will send the data to firebase
+
+        update_time, city_ref = fDb.collection(u'Hospitals').add(cData)
+
+        
